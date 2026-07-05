@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Backend do micro-site da FGTI - UCM Pemba",
   "main": "server.js",
-  "scripts": {
+  "scripts": {"prestart": "node scripts/init-db.js",
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
