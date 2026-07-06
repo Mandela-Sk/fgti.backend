@@ -2,7 +2,8 @@
 // Script de inicialização da base de dados — cria tabelas e insere dados iniciais
 // Corre automaticamente antes do servidor arrancar (idempotente e seguro)
 
-console.log('DEBUG DB_HOST:', process.env.DB_HOST, '| DB_NAME:', process.env.DB_NAME);
+const mysql = require('mysql2/promise');
+   console.log('DEBUG DB_HOST:', process.env.DB_HOST, '| DB_NAME:', process.env.DB_NAME);
 
 const CREATE_STATEMENTS = [
   `CREATE TABLE IF NOT EXISTS utilizadores (
