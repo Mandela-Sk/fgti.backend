@@ -56,7 +56,17 @@ const CREATE_STATEMENTS = [
     proposta TEXT,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   )`
-];
+,
+  `CREATE TABLE IF NOT EXISTS votos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    candidatura_id INT NOT NULL,
+    utilizador_id INT NOT NULL,
+    cargo VARCHAR(150) NOT NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (candidatura_id) REFERENCES candidaturas(id) ON DELETE CASCADE,
+    FOREIGN KEY (utilizador_id) REFERENCES utilizadores(id) ON DELETE CASCADE,
+    UNIQUE KEY voto_unico_por_cargo (utilizador_id, cargo)
+  )`];
 
 const CURSOS_SEED = [
   ['ti', 'Licenciatura em Tecnologias de Informação', '4 anos', 'Técnico Informático, Gestor de Redes, Técnico de Hardware'],
