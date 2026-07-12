@@ -7,7 +7,7 @@ const cursosRoutes = require("./routes/cursos");
 const materiaisRoutes = require("./routes/materiais");
 const noticiasRoutes = require("./routes/noticias");
 const candidaturasRoutes = require("./routes/candidaturas");
-
+const votosRoutes = require("./routes/votos");
 const app = express();
 
 app.use(cors());
@@ -22,7 +22,7 @@ app.use("/api/cursos", cursosRoutes);
 app.use("/api/materiais", materiaisRoutes);
 app.use("/api/noticias", noticiasRoutes);
 app.use("/api/candidaturas", candidaturasRoutes);
-
+app.use("/api/votos", votosRoutes);
 app.use((req, res) => {
   res.status(404).json({ erro: "Rota não encontrada." });
 });
