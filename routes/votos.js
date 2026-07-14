@@ -59,5 +59,14 @@ router.get("/resultados", async (req, res) => {
     res.status(500).json({ erro: "Erro ao obter resultados." });
   }
 });
-
+// ---------- ROTA TEMPORÁRIA: limpar votos (apagar depois de usar!) ----------
+router.delete("/limpar-tudo-teste", async (req, res) => {
+  try {
+    await pool.query("DELETE FROM votos");
+    res.json({ mensagem: "Todos os votos foram apagados." });
+  } catch (erro) {
+    console.error(erro);
+    res.status(500).json({ erro: "Erro ao limpar votos." });
+  }
+});
 module.exports = router;
