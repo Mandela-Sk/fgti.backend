@@ -13,7 +13,9 @@ router.post("/registo", async (req, res) => {
     if (!nome || !email || !password) {
       return res.status(400).json({ erro: "Nome, email e password são obrigatórios." });
     }
-
+if (!email.endsWith("@ucm.ac.mz")) {
+      return res.status(400).json({ erro: "Regista-te com o teu email institucional (@ucm.ac.mz)." });
+    }
     const [existentes] = await pool.query("SELECT id FROM utilizadores WHERE email = ?", [email]);
     if (existentes.length > 0) {
       return res.status(409).json({ erro: "Já existe uma conta com este email." });
