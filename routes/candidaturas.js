@@ -32,5 +32,25 @@ router.post("/", verificarToken, async (req, res) => {
     res.status(500).json({ erro: "Erro ao submeter candidatura." });
   }
 });
-
+// ---------- ROTA TEMPORÁRIA: preparar estrutura da base de dados (apagar depois de usar!) ----------
+router.post("/setup-temporario", async (req, res) => {
+  try {
+    await pool.query("ALTER TABLE candidaturas ADD COLUMN utilizador_id INT");
+    await pool.query("ALTER TABLE candidaturas ADD FOREIGN KEY (utilizador_id) REFERENCES utilizadores(id)");
+    await pool.query(`
+      CREATE TABLE posts_campanha (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        candidatura_id INT NOT NULL,
+        titulo VARCHAR(150) NOT NULL,
+        conteudo TEXT NOT NULL,
+        criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (candidatura_id) REFERENCES candidaturas(id)
+      )
+    `);
+    res.json({ mensagem: "Estrutura da base de dados atualizada com sucesso!" });
+  } catch (erro) {
+    console.error(erro);
+    res.status(500).json({ erro: "Erro ao atualizar estrutura.", detalhes: erro.message });
+  }
+})
 module.exports = router;
