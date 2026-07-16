@@ -32,5 +32,14 @@ router.post("/", verificarToken, async (req, res) => {
     res.status(500).json({ erro: "Erro ao submeter candidatura." });
   }
 });
-
+// ---------- ROTA TEMPORÁRIA: limpar candidaturas de teste (apagar depois de usar!) ----------
+router.delete("/limpar-tudo-teste", async (req, res) => {
+  try {
+    await pool.query("DELETE FROM candidaturas");
+    res.json({ mensagem: "Todas as candidaturas foram apagadas." });
+  } catch (erro) {
+    console.error(erro);
+    res.status(500).json({ erro: "Erro ao limpar candidaturas." });
+  }
+});
 module.exports = router;
