@@ -13,19 +13,20 @@ router.get("/", async (req, res) => {
     res.status(500).json({ erro: "Erro ao obter candidaturas." });
   }
 });
-
 router.post("/", verificarToken, async (req, res) => {
   try {
-    const { nome_candidato, cargo, proposta } = req.body;
-    if (!nome_candidato || !cargo) {
-      return res.status(400).json({ erro: "Nome do candidato e cargo são obrigatórios." });
+    const { cargo, proposta } = req.body;
+    const nome_candidato = req.utilizador.nome;
+    const utilizador_id = req.utilizador.id;
+
+    if (!cargo) {
+      return res.status(400).json({ erro: "O cargo é obrigatório." });
     }
 
     const [resultado] = await pool.query(
-      "INSERT INTO candidaturas (nome_candidato, cargo, proposta) VALUES (?, ?, ?)",
-      [nome_candidato, cargo, proposta || ""]
+      "INSERT INTO candidaturas (nome_candidato, cargo, proposta, utilizador_id) VALUES (?, ?, ?, ?)",
+      [nome_candidato, cargo, proposta || "", utilizador_id]
     );
-
     res.status(201).json({ mensagem: "Candidatura submetida com sucesso!", id: resultado.insertId });
   } catch (erro) {
     console.error(erro);
