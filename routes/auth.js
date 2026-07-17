@@ -68,21 +68,7 @@ router.post("/login", async (req, res) => {
     });
   } catch (erro) {
     console.error(erro);
-    res.status(500).json({ erro: "Erro no servidor ao fazer login." });
-  }
-});
-// ---------- ROTA TEMPORÁRIA: corrigir nome de utilizador (apagar depois de usar!) ----------
-router.put("/corrigir-nome-temporario", async (req, res) => {
-  try {
-    const { email, novo_nome } = req.body;
-    if (!email || !novo_nome) {
-      return res.status(400).json({ erro: "email e novo_nome são obrigatórios." });
-    }
-    await pool.query("UPDATE utilizadores SET nome = ? WHERE email = ?", [novo_nome, email]);
-    res.json({ mensagem: "Nome atualizado com sucesso!" });
-  } catch (erro) {
-    console.error(erro);
-    res.status(500).json({ erro: "Erro ao atualizar nome." });
+      res.status(500).json({ erro: "Erro no servidor ao fazer login." });
   }
 });
 module.exports = router;
