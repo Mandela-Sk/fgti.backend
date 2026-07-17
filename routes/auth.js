@@ -71,4 +71,20 @@ router.post("/login", async (req, res) => {
       res.status(500).json({ erro: "Erro no servidor ao fazer login." });
   }
 });
+// ---------- ROTA TEMPORÁRIA: redefinir password (apagar depois de usar!) ----------
+router.put("/redefinir-password-temporario", async (req, res) => {
+  try {
+    const { email, nova_password } = req.body;
+    if (!email || !nova_password) {
+      return res.status(400).json({ erro: "email e nova_password são obrigatórios." });
+    }
+    const novaHash = await bcrypt.hash(nova_password, 10);
+    await pool.query("UPDATE utilizadores SET password_hash = ? WHERE email = ?", [novaHash, email]);
+    res.json({ mensagem: "Password redefinida com sucesso!" });
+  } catch (erro) {
+    console.error(erro);
+    res.status(500).json({ erro: "Erro ao redefinir password." });
+  }
+});
+
 module.exports = router;
