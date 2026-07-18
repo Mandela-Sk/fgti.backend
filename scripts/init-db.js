@@ -54,7 +54,9 @@ const CREATE_STATEMENTS = [
     nome_candidato VARCHAR(150) NOT NULL,
     cargo VARCHAR(150) NOT NULL,
     proposta TEXT,
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    utilizador_id INT NOT NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (utilizador_id) REFERENCES utilizadores(id) ON DELETE CASCADE
   )`
 ,
   `CREATE TABLE IF NOT EXISTS votos (
@@ -66,6 +68,15 @@ const CREATE_STATEMENTS = [
     FOREIGN KEY (candidatura_id) REFERENCES candidaturas(id) ON DELETE CASCADE,
     FOREIGN KEY (utilizador_id) REFERENCES utilizadores(id) ON DELETE CASCADE,
     UNIQUE KEY voto_unico_por_cargo (utilizador_id, cargo)
+  )`
+,
+  `CREATE TABLE IF NOT EXISTS posts_campanha (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    candidatura_id INT NOT NULL,
+    titulo VARCHAR(255) NOT NULL,
+    conteudo TEXT NOT NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (candidatura_id) REFERENCES candidaturas(id) ON DELETE CASCADE
   )`];
 
 const CURSOS_SEED = [
