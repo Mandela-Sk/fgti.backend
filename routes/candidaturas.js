@@ -76,9 +76,36 @@ router.get("/:id/posts", async (req, res) => {
       [candidatura_id]
     );
     res.json(posts);
+  
   } catch (erro) {
     console.error(erro);
     res.status(500).json({ erro: "Erro ao obter posts." });
 }
       });
+
+// ---------- Remover candidatura (só o dono) ----------
+router.delete("/:id", verificarToken, async (req, res) => {
+  try {
+    const candidatura_id = req.params.id;
+
+    const [candidaturas] = await pool.query(
+      "SELECT * FROM candidaturas WHERE id = ?",
+      [candidatura_id]
+    );
+    if (candidaturas.length === 0) {
+      return res.status(404).json({ erro: "Candidatura não encontrada." });
+    }
+
+    if (candidaturas[0].utilizador_id !== req.utilizador.id) {
+      return res.status(403).json({ erro: "Só o dono da candidatura pode removê-la." });
+    }
+
+    await pool.query("DELETE FROM candidaturas WHERE id = ?", [candidatura_id]);
+    res.json({ mensagem: "Candidatura removida com sucesso!" });
+  } catch (erro) {
+    console.error(erro);
+    res.status(500).json({ erro: "Erro ao remover candidatura." });
+  }
+});
+
 module.exports = router;
